@@ -6,6 +6,11 @@ cache:
     - $HOME/.cache/pip
     - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
 
+
+branches:
+  only:
+    - master
+
 install:
   # The versions of pip and numpy that come pre-installed are often too old and
   # can cause problems. Upgrade them.
@@ -21,3 +26,15 @@ script:
   - codecov  # Upload the report to codecov.
   - flake8  # Enforce code style ('relaxed' line length limit is set in .flake8 config file).
   - make -C docs html  # Build the documentation.
+  - touch docs/build/html/.nojekyll ## Take out the jekyll config of gh-pages
+
+  deploy:
+  - provider: pages:git
+    verbose: true
+    token: $GITHUB_TOKEN
+    edge: true
+    local_dir: ./docs/build/html/
+    keep_history: true
+    target-branch: gh-pages
+    on:
+      branch: master # only do this when on the master branch
