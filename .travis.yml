@@ -12,16 +12,20 @@ script:
 - flake8
 - make -C docs html
 - touch docs/build/html/.nojekyll
+
+
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_3a68a39d21bf_key -iv $encrypted_3a68a39d21bf_iv
+  -in docs/key.enc -out docs/key -d
+
 deploy:
 - provider: pages:git
   verbose: true
-  token: "$GITHUB_TOKEN"
+  # token: "$GITHUB_TOKEN"
+  deploy_key: docs/key
   edge: true
   local_dir: "./docs/build/html/"
   keep_history: true
   target-branch: gh-pages
   on:
     branch: master
-after_success:
-- openssl aes-256-cbc -K $encrypted_3a68a39d21bf_key -iv $encrypted_3a68a39d21bf_iv
-  -in docs/key.enc -out docs/key -d
