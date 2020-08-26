@@ -7,9 +7,9 @@ cache:
     - $HOME/.ccache  # https://github.com/travis-ci/travis-ci/issues/5853
 
 
-branches:
-  only:
-    - master
+# branches:
+  # only:
+  #   - master
 
 install:
   # The versions of pip and numpy that come pre-installed are often too old and
