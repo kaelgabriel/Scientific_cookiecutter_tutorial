@@ -1,36 +1,27 @@
 language: python
 python:
-  - 3.6
-
-
-# branches:
-  # only:
-  #   - master
-
+- 3.6
 install:
-  # The versions of pip and numpy that come pre-installed are often too old and
-  # can cause problems. Upgrade them.
-  - pip install --upgrade pip numpy
-  # Install this package and the packages listed in requirements.txt.
-  - pip install .
-  # Install extra requirements for running tests and building docs.
-  - pip install -r requirements-dev.txt
-
+- pip install --upgrade pip numpy
+- pip install .
+- pip install -r requirements-dev.txt
 script:
-  - coverage run -m pytest  # Run the tests and check for test coverage.
-  - coverage report -m  # Generate test coverage report.
-  - codecov  # Upload the report to codecov.
-  - flake8  # Enforce code style ('relaxed' line length limit is set in .flake8 config file).
-  - make -C docs html  # Build the documentation.
-  - touch docs/build/html/.nojekyll ## Take out the jekyll config of gh-pages
-
+- coverage run -m pytest
+- coverage report -m
+- codecov
+- flake8
+- make -C docs html
+- touch docs/build/html/.nojekyll
 deploy:
 - provider: pages:git
   verbose: true
-  token: $GITHUB_TOKEN
+  token: "$GITHUB_TOKEN"
   edge: true
-  local_dir: ./docs/build/html/
+  local_dir: "./docs/build/html/"
   keep_history: true
   target-branch: gh-pages
   on:
-    branch: master # only do this when on the master branch
+    branch: master
+after_success:
+- openssl aes-256-cbc -K $encrypted_3a68a39d21bf_key -iv $encrypted_3a68a39d21bf_iv
+  -in docs/key.enc -out docs/key -d
